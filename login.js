@@ -1,56 +1,55 @@
+class LoginForm {
+    constructor(formId, submitBtnId) {
+        this.form = document.getElementById(formId);
+        this.submitBtn = document.getElementById(submitBtnId);
 
-import React, { useState } from 'react';
-import axios from 'axios';
-import { setUserSession } from './Utils/Common';
+        this.usernameElement = document.getElementById('username');
+        this.passwordElement = document.getElementById('password');
 
-function Login(props) {
-  const [loading, setLoading] = useState(false);
-  const username = useFormInput('');
-  const password = useFormInput('');
-  const [error, setError] = useState(null);
+        this.userErrorElement = document.getElementById('invalid-user');
+        this.passErrorElement = document.getElementById('invalid-pass');
 
-  // handle button click of login form
-  const handleLogin = () => {
-    setError(null);
-    setLoading(true);
-    axios.post('http://localhost:4000/users/signin', { username: username.value, password: password.value }).then(response => {
-      setLoading(false);
-      setUserSession(response.data.token, response.data.user);
-      props.history.push('/dashboard');
-    }).catch(error => {
-      setLoading(false);
-      if (error.response.status === 401) setError(error.response.data.message);
-      else setError("Something went wrong. Please try again later.");
-    });
-  }
+        this.form.addEventListener('submit', (event) => this.login(event));
+    }
 
-  return (
-    <div>
-      Login<br /><br />
-      <div>
-        Username<br />
-        <input type="text" {...username} autoComplete="new-password" />
-      </div>
-      <div style={{ marginTop: 10 }}>
-        Password<br />
-        <input type="password" {...password} autoComplete="new-password" />
-      </div>
-      {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
-      <input type="button" value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} /><br />
-    </div>
-  );
+    showError(inputElement, errorElement, message, duration = 3000) {
+        errorElement.textContent = message;
+        inputElement.focus();
+        setTimeout(() => (errorElement.textContent = ''), duration);
+    }
+
+    toggleButton(enabled, text) {
+        this.submitBtn.disabled = !enabled; // flips the meaning
+        this.submitBtn.textContent = text;
+    }
+
+    login(event) {
+        event.preventDefault();
+
+        const username = this.usernameElement.value.trim();
+        const password = this.passwordElement.value.trim();
+
+        // Clear previous errors
+        this.userErrorElement.textContent = '';
+        this.passErrorElement.textContent = '';
+
+        // Validate inputs
+        if (username === '') {
+            return this.showError(this.usernameElement, this.userErrorElement, 'Username cannot be empty');
+        }
+        if (password === '') {
+            return this.showError(this.passwordElement, this.passErrorElement, 'Password cannot be empty');
+        }
+
+        // Simulate login
+        this.toggleButton(false, 'Logging in...');
+        setTimeout(() => {
+            alert('Login simulated - valid inputs. Implement server auth for real logins.');
+            this.form.reset();
+            this.toggleButton(true, 'Login');
+        }, 800);
+    }
 }
 
-const useFormInput = initialValue => {
-  const [value, setValue] = useState(initialValue);
-
-  const handleChange = e => {
-    setValue(e.target.value);
-  }
-  return {
-    value,
-    onChange: handleChange
-  }
-}
-
-export default Login;
+// eslint-disable-next-line no-unused-vars
+const _loginForm = new LoginForm('loginform', 'login-btn');
