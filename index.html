@@ -1,145 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Personality Predictor</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body
-    class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center"
-  >
-    <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-lg">
-      <h1 class="text-2xl font-semibold mb-6 text-center">
-        Predict Your Personality
-      </h1>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-card">
+        <h2>Selamat Datang</h2>
+        <p class="subtitle">Silakan masuk ke akun Anda</p>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Email / Username</label>
+                <input type="text" id="username" placeholder="Masukkan username" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Kata Sandi</label>
+                <input type="password" id="password" placeholder="Masukkan kata sandi" required>
+            </div>
 
-      <form id="predictForm" class="space-y-4">
-        <div>
-          <label class="block mb-1 font-medium">Time Spent Alone (hours)</label>
-          <input
-            type="number"
-            name="Time_spent_Alone"
-            class="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
+            <div class="form-options">
+                <label><input type="checkbox"> Ingat saya</label>
+                <a href="#">Lupa password?</a>
+            </div>
 
-        <div>
-          <label class="block mb-1 font-medium">Stage Fear</label>
-          <select
-            name="Stage_fear"
-            class="w-full p-2 border border-gray-300 rounded"
-          >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
+            <button type="submit" class="btn-login">Masuk</button>
+        </form>
 
-        <div>
-          <label class="block mb-1 font-medium"
-            >Social Event Attendance (per month)</label
-          >
-          <input
-            type="number"
-            name="Social_event_attendance"
-            class="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
-
-        <div>
-          <label class="block mb-1 font-medium"
-            >Going Outside (days/week)</label
-          >
-          <input
-            type="number"
-            name="Going_outside"
-            class="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
-
-        <div>
-          <label class="block mb-1 font-medium"
-            >Drained After Socializing</label
-          >
-          <select
-            name="Drained_after_socializing"
-            class="w-full p-2 border border-gray-300 rounded"
-          >
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block mb-1 font-medium">Friends Circle Size</label>
-          <input
-            type="number"
-            name="Friends_circle_size"
-            class="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
-
-        <div>
-          <label class="block mb-1 font-medium"
-            >Post Frequency (per week)</label
-          >
-          <input
-            type="number"
-            name="Post_frequency"
-            class="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-        >
-          Predict
-        </button>
-      </form>
-
-      <div
-        id="result"
-        class="mt-6 text-center text-lg font-semibold text-green-600 hidden"
-      ></div>
+        <p class="signup-text">Belum punya akun? <a href="#">Daftar sekarang</a></p>
     </div>
 
-    <script>
-      const form = document.getElementById("predictForm");
-      const resultDiv = document.getElementById("result");
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
-        for (let key in data) {
-          if (!isNaN(data[key])) {
-            data[key] = Number(data[key]);
-          }
-        }
-
-        try {
-          const response = await fetch("http://localhost:8000/predict", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-          });
-
-          const result = await response.json();
-          resultDiv.textContent = `Predicted Personality: ${result.prediction}`;
-          resultDiv.classList.remove("hidden");
-        } catch (err) {
-          resultDiv.textContent = "Error connecting to API.";
-          resultDiv.classList.remove("hidden");
-          resultDiv.classList.replace("text-green-600", "text-red-600");
-        }
-      });
-    </script>
-  </body>
+    <script src="script.js"></script>
+</body>
 </html>
