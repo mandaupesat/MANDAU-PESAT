@@ -1,5 +1,5 @@
 // GANTI DENGAN URL DEPLOYMENT GOOGLE APPS SCRIPT ANDA
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwe6Q1iKV2fhTGaF_Nn4fWw0i7OlZYydS5-8nRy0A8y/dev";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx5bNx_79tXtWqOMlcaCZ2lEz-7V4CVGBJubJfyjoz9GHU-fJRCYBD7q-b2Plmeh1ezRQ/exec";
 
 const loginForm = document.getElementById('loginForm');
 const submitBtn = document.getElementById('submitBtn');
