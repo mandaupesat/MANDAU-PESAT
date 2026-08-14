@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Autentikasi - Biru & Emas</title>
+    <title>MANDAU PESAT SMQ</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -234,44 +234,6 @@
         </div>
 
         <!-- TAMPILAN DASHBOARD (SETELAH LOGIN) -->
-        <div id="dashboard-box" style="display: none;">
-            <div class="auth-header">
-                <h1>Area Pengguna</h1>
-                <p>Anda berhasil masuk ke sistem</p>
-            </div>
-            <div class="user-info">
-                <small style="color: var(--text-muted)">Login sebagai:</small>
-                <h3 id="display-username" style="color: var(--gold-light)">-</h3>
-            </div>
-            <div class="dashboard-actions">
-                <button onclick="switchView('reset')" class="btn-gold btn-outline">Ubah Password</button>
-                <button onclick="handleLogout()" class="btn-gold">Keluar (Logout)</button>
-            </div>
-        </div>
-
-        <!-- FORM UBAH PASSWORD -->
-        <div id="reset-box" style="display: none;">
-            <div class="auth-header">
-                <h1>Ubah Password</h1>
-                <p>Perbarui kata sandi akun Anda</p>
-            </div>
-            <form id="reset-form">
-                <div class="form-group">
-                    <label for="old-password">Password Saat Ini</label>
-                    <input type="password" id="old-password" required placeholder="••••••••">
-                </div>
-                <div class="form-group">
-                    <label for="new-password">Password Baru</label>
-                    <input type="password" id="new-password" required placeholder="Minimal 6 karakter">
-                </div>
-                <button type="submit" class="btn-gold">Simpan Password Baru</button>
-            </form>
-            <div class="toggle-link">
-                <a href="#" onclick="switchView('dashboard')">← Kembali ke Dashboard</a>
-            </div>
-        </div>
-
-    </div>
 
     <script>
         // --- LOGIKA MANAJEMEN USER ---
