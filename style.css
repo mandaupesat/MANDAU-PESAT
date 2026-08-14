@@ -149,20 +149,3 @@ body {
   display: block;
 }
 
-.switch-mode {
-  margin-top: 25px;
-  font-size: 13px;
-  color: var(--text-dim);
-}
-
-.switch-mode a {
-  color: var(--gold-primary);
-  text-decoration: none;
-  font-weight: 600;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-.switch-mode a:hover {
-  text-decoration: underline;
-}
