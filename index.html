@@ -1,8 +1,419 @@
 <!DOCTYPE html>
 <html lang="id">
-<head></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Autentikasi - Biru & Emas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a1128;
+            --bg-secondary: #001f54;
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa7c11 100%);
+            --text-light: #f4f4f9;
+            --text-muted: #a0aab8;
+            --error-color: #ff6b6b;
+            --success-color: #51cf66;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, var(--bg-secondary) 0%, var(--bg-primary) 70%);
+            padding: 1.5rem;
+        }
+
+        .auth-container {
+            background: rgba(0, 31, 84, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--gold-light);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(10, 17, 40, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-gold {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--gold-gradient);
+            color: #0a1128;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
+            margin-top: 0.5rem;
+        }
+
+        .btn-outline:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .alert-message {
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+            text-align: center;
+        }
+
+        .alert-error {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .alert-success {
+            background: rgba(81, 207, 102, 0.15);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .toggle-link a {
+            color: var(--gold-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dashboard (Tampilan setelah Login) */
+        .dashboard-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .user-info {
+            background: rgba(10, 17, 40, 0.5);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--gold-primary);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
 <body>
-<h2>DSAHBOARD PENGAWASAN</h2>
-    <iframe title="DB PENGAWASAN P2 SEEEMPIT" width="600" height="486" src="https://app.powerbi.com/view?r=eyJrIjoiOTA1NzcwYmMtODUzYS00Yjg2LTlhMjktYzdiODk3OGJjOTNjIiwidCI6ImVkNmZiMzY2LTgzMjItNDZmMy05MTVlLWM0ZDAzN2E0NTRhOSIsImMiOjEwfQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>
+
+    <div class="auth-container">
+        <!-- ALERT MESSAGE -->
+        <div id="alert" class="alert-message"></div>
+
+        <!-- FORM LOG IN -->
+        <div id="login-box">
+            <div class="auth-header">
+                <h1>Selamat Datang</h1>
+                <p>Masukkan kredensial Anda untuk masuk</p>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" required placeholder="Masukkan username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-gold">Masuk</button>
+            </form>
+            <div class="toggle-link">
+                Belum punya akun? <a href="#" onclick="switchView('register')">Daftar sekarang</a>
+            </div>
+        </div>
+
+        <!-- FORM REGISTRASI -->
+        <div id="register-box" style="display: none;">
+            <div class="auth-header">
+                <h1>Buat Akun</h1>
+                <p>Daftar untuk mengakses sistem</p>
+            </div>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="reg-username">Username Baru</label>
+                    <input type="text" id="reg-username" required placeholder="Pilih username">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" required placeholder="Minimal 6 karakter">
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm-password">Konfirmasi Password</label>
+                    <input type="password" id="reg-confirm-password" required placeholder="Ulangi password">
+                </div>
+                <button type="submit" class="btn-gold">Daftar</button>
+            </form>
+            <div class="toggle-link">
+                Sudah punya akun? <a href="#" onclick="switchView('login')">Masuk di sini</a>
+            </div>
+        </div>
+
+        <!-- TAMPILAN DASHBOARD (SETELAH LOGIN) -->
+        <div id="dashboard-box" style="display: none;">
+            <div class="auth-header">
+                <h1>Area Pengguna</h1>
+                <p>Anda berhasil masuk ke sistem</p>
+            </div>
+            <div class="user-info">
+                <small style="color: var(--text-muted)">Login sebagai:</small>
+                <h3 id="display-username" style="color: var(--gold-light)">-</h3>
+            </div>
+            <div class="dashboard-actions">
+                <button onclick="switchView('reset')" class="btn-gold btn-outline">Ubah Password</button>
+                <button onclick="handleLogout()" class="btn-gold">Keluar (Logout)</button>
+            </div>
+        </div>
+
+        <!-- FORM UBAH PASSWORD -->
+        <div id="reset-box" style="display: none;">
+            <div class="auth-header">
+                <h1>Ubah Password</h1>
+                <p>Perbarui kata sandi akun Anda</p>
+            </div>
+            <form id="reset-form">
+                <div class="form-group">
+                    <label for="old-password">Password Saat Ini</label>
+                    <input type="password" id="old-password" required placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label for="new-password">Password Baru</label>
+                    <input type="password" id="new-password" required placeholder="Minimal 6 karakter">
+                </div>
+                <button type="submit" class="btn-gold">Simpan Password Baru</button>
+            </form>
+            <div class="toggle-link">
+                <a href="#" onclick="switchView('dashboard')">← Kembali ke Dashboard</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- LOGIKA MANAJEMEN USER ---
+
+        // Inisialisasi Database Pengguna di LocalStorage
+        function getUsersDB() {
+            return JSON.parse(localStorage.getItem('users_db')) || [];
+        }
+
+        function saveUsersDB(db) {
+            localStorage.setItem('users_db', JSON.stringify(db));
+        }
+
+        function getActiveSession() {
+            return localStorage.getItem('active_session');
+        }
+
+        // Tampilkan Pesan Status (Alert)
+        function showAlert(message, isSuccess = false) {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = message;
+            alertBox.className = `alert-message ${isSuccess ? 'alert-success' : 'alert-error'}`;
+            alertBox.style.display = 'block';
+
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 4000);
+        }
+
+        // Perpindahan Tampilan Form
+        function switchView(viewName) {
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('register-box').style.display = 'none';
+            document.getElementById('dashboard-box').style.display = 'none';
+            document.getElementById('reset-box').style.display = 'none';
+
+            if (viewName === 'login') document.getElementById('login-box').style.display = 'block';
+            if (viewName === 'register') document.getElementById('register-box').style.display = 'block';
+            if (viewName === 'reset') document.getElementById('reset-box').style.display = 'block';
+            if (viewName === 'dashboard') {
+                document.getElementById('dashboard-box').style.display = 'block';
+                document.getElementById('display-username').textContent = getActiveSession();
+            }
+        }
+
+        // 1. PROSES REGISTRASI
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('reg-username').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+            if (password.length < 6) {
+                showAlert('Password minimal 6 karakter!');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAlert('Konfirmasi password tidak cocok!');
+                return;
+            }
+
+            const db = getUsersDB();
+            const userExists = db.some(u => u.username.toLowerCase() === username.toLowerCase());
+
+            if (userExists) {
+                showAlert('Username sudah terdaftar! Gunakan yang lain.');
+                return;
+            }
+
+            // Simpan akun baru
+            db.push({ username, password });
+            saveUsersDB(db);
+
+            showAlert('Registrasi berhasil! Silakan login.', true);
+            this.reset();
+            switchView('login');
+        });
+
+        // 2. PROSES LOG IN
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            const db = getUsersDB();
+            const user = db.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+
+            if (!user) {
+                showAlert('Username atau password salah!');
+                return;
+            }
+
+            // Simpan Sesi Login
+            localStorage.setItem('active_session', user.username);
+            this.reset();
+            switchView('dashboard');
+            showAlert(`Selamat datang kembali, ${user.username}!`, true);
+        });
+
+        // 3. PROSES UBAH PASSWORD
+        document.getElementById('reset-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const oldPassword = document.getElementById('old-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const currentUser = getActiveSession();
+
+            if (newPassword.length < 6) {
+                showAlert('Password baru minimal 6 karakter!');
+                return;
+            }
+
+            const db = getUsersDB();
+            const userIndex = db.findIndex(u => u.username === currentUser);
+
+            if (userIndex !== -1 && db[userIndex].password === oldPassword) {
+                db[userIndex].password = newPassword;
+                saveUsersDB(db);
+                showAlert('Password berhasil diperbarui!', true);
+                this.reset();
+                switchView('dashboard');
+            } else {
+                showAlert('Password saat ini salah!');
+            }
+        });
+
+        // 4. PROSES LOGOUT
+        function handleLogout() {
+            localStorage.removeItem('active_session');
+            showAlert('Anda telah keluar dari sistem.', true);
+            switchView('login');
+        }
+
+        // Cek Sesi Saat Halaman Diberdayakan
+        window.addEventListener('DOMContentLoaded', () => {
+            const activeUser = getActiveSession();
+            if (activeUser) {
+                switchView('dashboard');
+            } else {
+                switchView('login');
+            }
+        });
+    </script>
 </body>
 </html>
